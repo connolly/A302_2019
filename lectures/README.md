@@ -5,4 +5,4 @@
 
 ## Lectures/notebooks 
 
- *  Lecture 1: [Introduction](01-Introduction.pdf)
+ *  Lecture 1: [Introduction](lecture-01-introduction.pdf)
