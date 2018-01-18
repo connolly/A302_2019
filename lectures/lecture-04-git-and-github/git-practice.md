@@ -1,4 +1,4 @@
-## This is how we will practice using git and github
+## This is how we will practice using git and GitHub
 
 ### Basics
 
@@ -137,7 +137,7 @@ git checkout master
 cat README.md
 ```
 
-Note how there’s no change from the new-feature branch (as expected).
+Note how changes made on the `new-feature` branch are not visible here (as expected).
 
 We can go ahead and also make some changes on master:
 ```
@@ -145,7 +145,7 @@ echo "Another tracked file" > AnotherFile.txt
 git commit -a
 ```
 
-Let's look at how all this looks like:
+Let's look at what all this looks like:
 ```
 git log --oneline --decorate
 git log --oneline --decorate --graph --all
@@ -159,6 +159,242 @@ git log --oneline --decorate --graph --all
 ```
 
 This is “branch & merge” technique is a powerful way to incrementally develop analyses or codes.
+
+### Merge conflicts
+
+Sometimes there are conflicting changes in two branches; this is what is known as a _merge conflict_.
+When you attempt a merge with conflicting changes, git will stop and ask for your help.
+
+To practice this, I've created a repository on GitHub that has a merge conflict between two branches. Let's `clone` it with:
+```
+git clone https://github.com/uw-astr-302-w18/merge-conflict-demo.git
+```
+(n.b. we'll get to talking about GitHub, cloning, etc. in just a bit).
+
+Now enter the cloned directory and run `git log`:
+```
+$ cd merge-conflict-demo
+$ git log --graph --all --oneline --decorate
+* 3dcfa3f (HEAD -> master, origin/master, origin/HEAD) Change how we initialize the dict
+| * b3767a8 (origin/feature/add) added an implementation of 'add'
+|/
+* b4b4804 Initial implementation of 'mul'
+```
+You'll find there's a branch named `origin/feature/add`; let's try to merge it:
+```
+$ git merge origin/feature/add
+Auto-merging calc
+CONFLICT (content): Merge conflict in calc
+Automatic merge failed; fix conflicts and then commit the result.
+```
+Run `git status` to see what's going on:
+```
+$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+
+	both modified:   calc
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+This tells us that the file `calc` has been modified on both branches and git cannot tell how to merge the changes. Let's see what's happened:
+```
+$ cat calc
+#!/usr/bin/env python
+
+import sys
+
+def add(args):
+	res = 0.0
+	for arg in args:
+		res += arg
+	return res
+
+def mul(args):
+	prod = 1.0
+	for arg in args:
+		prod *= arg
+	return prod
+
+<<<<<<< HEAD
+operators = dict(mul=mul)
+=======
+operators = {
+	'mul': mul,
+	'add': add
+}
+>>>>>>> origin/feature/add
+
+if __name__ == "__main__":
+	op = sys.argv[1]
+	args = [ float(arg) for arg in sys.argv[2:] ]
+	print(operators[op](args))
+```
+
+Notice the block enclosed in `<<<<` and `>>>>` -- this is the part where git
+needs our help. Our destination branch advocates for one set of lines (those between
+`<<<<` and `====`). The branch we're merging advocates for another (those between `====`
+and `>>>>`).
+
+We need to edit the file and choose one (let's choose the second option). 
+After the edits, we have:
+```
+$ cat calc
+#!/usr/bin/env python
+
+import sys
+
+def add(args):
+	res = 0.0
+	for arg in args:
+		res += arg
+	return res
+
+def mul(args):
+	prod = 1.0
+	for arg in args:
+		prod *= arg
+	return prod
+
+operators = {
+	'mul': mul,
+	'add': add
+}
+
+if __name__ == "__main__":
+	op = sys.argv[1]
+	args = [ float(arg) for arg in sys.argv[2:] ]
+	print(operators[op](args))
+```
+
+and now let's finish the merge by committing:
+
+```
+git commit -a
+```
+
+The log now shows the merge:
+```
+$ git log --graph --all --oneline --decorate
+*   64b33d7 (HEAD -> master) Merge remote-tracking branch 'origin/feature/add'
+|\
+| * d609eb5 (origin/feature/add) added an implementation of 'add'
+* | 3dcfa3f (origin/master, origin/HEAD) Change how we initialize the dict
+|/
+* b4b4804 Initial implementation of 'mul'
+```
+
+The best way to resolve merge conflicts is to avoid them in the first place
+-- try not to introduce conflicting changes on different branches. However,
+when they do happen, git will helpfully flag the problematic areas in the
+files, while merging the others.
+
+Note: this type of merge conflict resolution works only with text files.  If
+there are conflicts between binary files (for example, two images), you will
+have to choose one or the other.
+
+### GitHub
+
+How do we effectivelly share our repositories? This is where GitHub comes in.
+
+First, let’s make sure you all have accounts on GitHub.
+
+Then, let us create a new repository (named astr302-$USER, where $USER is
+your _local_ username) and then:
+
+```
+git remote add origin git@github.com:mjuric/astr302-mjuric.git
+git push --all -u
+```
+
+In the first command, you should replace the URL (the web address) in the first line with the one for your repository. Note that GitHub will give you an address starting with `https://` by default -- unless you've set up [SSH keys](https://help.github.com/articles/connecting-to-github-with-ssh/), use it.
+The second command _copies_ all the commits stored on your local hard drive repository (the `.git` directory) to GitHub. Now refresh the page on GitHub and explore what GitHub has to offer!
+
+You can consider the copy on GitHub as your 'backup copy'. Even if you lose your entire computer, the commits of your files are safe and sound on GitHub.
+
+As you make new changes and new commits, you should occasionally push them _upstream_:
+```
+git push
+```
+This will push the commits from the current branch to the GitHub copy. Make it a habit to do this at least once a day.
+
+### Collaboration with GitHub
+
+`git` has a very different collaboration philosophy compared to (e.g.) Google
+Docs.  In Google Docs, you edit in real time, seeing your and everyone
+else's changes as they happen.  With `git`, you make a copy of the files
+(a `clone` of the repository), make the edits on the copy, and use `git` 
+(and/or GitHub) to merge them with the original. To signal that a set
+of changes is ready to be merged into the original, you open a [Pull Request](https://help.github.com/articles/about-pull-requests/).
+
+I'll begin by demonstrating a typical collaboration workflow on a toy
+scientific calculator project that you can find at
+https://github.com/uw-astr-302-w18/astr-302-scicalc.  Take note, as 
+your Homework #2 will be very similar to what I'm about to do!
+
+#### Practice
+
+* Let's go back to our toy project `astr302-$USER` and practice some more:
+  - Please pair up.
+  - Open an issue in your partner's repository, reporting that README.md is poorly formatted
+  - Partner: Reply to the issue by politely agreeing it could use some fixing, and asking the reporter to send a pull request ("send a PR").
+  - Contributor: Fork the repository by clicking the fork button on GitHub. This will create a _clone_ of your partner's repository in your own GitHub account. This clone contains a copy of everything in the original (usually referred to as 'upstream') repository. GitHub also remembers where you forked the repository from.
+  - Next, clone the fork to your computer. For example:
+  ```
+      git clone https://github.com/mjuric/astr302-mjuric
+  ```
+  This will now copy the repository from GitHub to your own computer, where you can freely edit it.
+  - Make the edits -- edit README.md to add the newlines between each sentence.
+  - Next, commit those changes:
+  ```
+      git commit -a
+  ```
+  - These changes have now been committed locally; push them back to GitHub as well:
+  ```
+      git push
+  ```
+  - On GitHub, create a pull request.
+  - Partner: Review and accept the pull request.
+
+* Let us come up with some other enhancement proposals for the scientific
+  calculator (at least one per person!).  Don't make them too difficult
+  (they will be your homework).  Open some issues at
+  https://github.com/uw-astr-302-w18/astr-302-scicalc/issues.
+
+## More things to try out
+
+### Syncing with Upstream
+
+  * When you pushed the ‘fork’ button on GitHub, the result was a full-fledged, but independent, clone of the original repository. If the original repository changes, you don’t get those changes by default. That way you can independently work on your own copy w/o worrying that someone will change things underneath you.
+  * The issue is what to do when you *do* want changes from the upstream repository. That’s easy — use git’s capability to merge new changes from the upstream repository.
+
+  * First, tell git about the upstream repository:
+
+    git remote add upstream git@github.com:mjuric/astr302-mjuric
+
+    You have to do this only once!
+
+  * Now, say:
+
+      git pull upstream master
+
+    And this will fetch upstream changes.
+
+    Now we can push it back:
+
+      git push
+
+    and view the changes on GitHub.
+
+  * For more information:
+    - https://help.github.com/articles/configuring-a-remote-for-a-fork/
+    - https://help.github.com/articles/syncing-a-fork/
 
 ### Tagging, working with branches
 
@@ -179,88 +415,3 @@ Resetting master to a previous version:
 git reset --hard v1.0
 ```
 
-### Github
-
-How do we effectivelly share the repositories? This is where github comes in.
-
-* Let’s make sure you all have accounts on github. Create a new repository, and then:
-
-```
-git remote add origin git@github.com:mjuric/astr302-mjuric.git
-git push -u origin master
-```
-
-(where you should replace the URL (the web address) in the first line with the one for your repository. Note that GitHub will give you an address starting with `https://` by default -- unless you've set up SSH keys, use that one.
-
-The second command _copies_ all the commits stored on your local hard drive (the `.git` repository) to GitHub. Now refresh the page on github and see what it lets you do!
-
-You can consider the copy on github as your 'backup copy'. Even if you lose your entire computer, the commits of your files are safe and sound on github.
-
-As you make new changes and new commits, don't forget to occasionally push them to GitHub:
-```
-git push
-```
-Note that you don't have to specify `origin master` as your destination, as `-u` made git remember it.
-
-### Collaboration with github
-
-Github is excellent at collaboratively working on software w/o stepping over each other’s toes. It has a very different philosophy compare to (e.g.) Google docs. There, you edit in real time, together with everyone else. With git, you make a _clone_ of the repository you wish to edit, make your changes, and suggest to the original author that they should merge those changes by making a “Pull Request”. That allows one to have more control and review over what changes are accepted.
-
-* Let's practice:
-  - Please pair up.
-  - Open an issue in your partner's repository, reporting that README.md is poorly formatted
-  - Partner: Reply to the issue by politely agreeing it’s a good idea, and asking the reporter to send a pull request ("send a PR").
-  - Contributor: Fork the repository by clicking the fork button on github. This will create a _clone_ of your partner's repository in your own GitHub account. This clone contains a copy of everything in the original (usually referred to as 'upstream') repository. GitHub also remembers where you forked the repository from.
-  - Next, clone your clone to your computer:
-  ```
-      git clone https://github.com/mjuric/astr302-mjuric
-  ```
-  This will now copy the repository from github to your own computer, where you can freely edit it.
-  - Make the edits -- edit README.md to add newlines between each sentence.
-  - Next, commit those changes:
-  ```
-      git commit -a
-  ```
-  - These changes have now been committed locally (into the `.git` directory, if you want to know the specifics). Push them back to github:
-  ```
-      git push
-  ```
-  - On GitHub, create a pull request.
-  - Partner: Accept a pull request.
-
-### Syncing with Upstream
-
-  * When you pushed the ‘fork’ button on github, the result was a full-fledged, but independent, clone of the original repository. If the original repository changes, you don’t get those changes by default. That way you can independently work on your own copy w/o worrying that someone will change things underneath you.
-  * The issue is what to do when you *do* want changes from the upstream repository. That’s easy — use git’s capability to merge new changes from the upstream repository.
-
-  * First, tell git about the upstream repository:
-
-    git remote add upstream git@github.com:mjuric/astr302-mjuric
-
-    You have to do this only once!
-
-  * Now, say:
-
-      git pull upstream master
-
-    And this will fetch upstream changes.
-
-    Now we can push it back:
-
-      git push
-
-    and view the changes on github.
-
-  * For more information:
-    - https://help.github.com/articles/configuring-a-remote-for-a-fork/
-    - https://help.github.com/articles/syncing-a-fork/
-
-### Merge conflicts
-  - Another common occurrence are merge conflicts. This is when there are conflicting changes in two branches.
-
-To practice this, let’s have everyone clone my repo:
-  * clone my repository
-  * edit README.md
-  * commit it.
-  * Now I’ll edit the file as well
-  * Once I do it, try to run a `git pull`.
