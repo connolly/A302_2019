@@ -1,16 +1,16 @@
 # ASTR 302, Winter 2018, University of Washington: 
 # Python for Astronomy
 
-[Mario Jurić](http://research.majuric.org)
+[Andrew Connolly](https://faculty.washington.edu/ajc26/)
 
 ## Location
 
- * When: 2:30-3:50, Tuesday & Thursday, Winter quarter 2018
+ * When: 11:00-12:20, Monday & Wednesday, Winter quarter 2019
  * Where: PAB 360 (Physics-Astronomy Computer Lab)
 
 ## Class Materials
 
- * [Syllabus and course description](syllabus/astr-302-w18-syllabus.pdf)
+ * [Syllabus and course description](syllabus/syllabus.pdf)
  * [Lectures](lectures/README.md)
  * [Homeworks](homeworks/)
  
