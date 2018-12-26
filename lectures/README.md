@@ -1,8 +1,12 @@
 # ASTR 302, Winter 2018, University of Washington: 
 # Python for Astronomy
 
-[Mario Jurić](http://research.majuric.org)
+[Andrew Connolly](https://faculty.washington.edu/ajc26)
 
 ## Lectures/notebooks 
 
- *  Lecture 1: [Introduction](lecture-01-introduction.pdf)
+ *  Lectures 1 and 2: [Introduction to the class and github](Lectures-1-2.md)
+ 
+ 
+ 
+
