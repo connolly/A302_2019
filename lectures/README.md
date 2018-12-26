@@ -5,4 +5,8 @@
 
 ## Lectures/notebooks 
 
- *  Lecture 1: [Introduction](lecture-01-introduction.pdf)
+ *  Lectures 1 and 2: [Introduction to the class and github](Lectures-1-2.md)
+ 
+ 
+ 
+
