@@ -3,7 +3,7 @@
 import sys
 import re
 
-isNumber = r'^[1-9][0-9]*\.?[0-9]*([Ee][+-]?[0-9]+)?$';
+isNumber = '^[1-9][0-9]*\.?[0-9]*([Ee][+-]?[0-9]+)?$';
 
 if len(sys.argv) != 3:
     print("Error: two arguments required.")
