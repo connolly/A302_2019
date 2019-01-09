@@ -5,7 +5,7 @@
 
 Lectures 1 & 2
 
-## Take the quiz available [here](https://pollev.com/andrewconnolly)
+## Take the questionaire available [here](https://pollev.com/andrewconnolly)
 
 
 
