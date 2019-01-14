@@ -5,7 +5,7 @@
 
 ## Lectures/notebooks 
 
- *  Lectures 1 and 2: [Introduction to the class and github](lecture-01-github-questionaire)
+ *  Lectures 1 and 2: [Introduction to the class and github](lecture-01-github-questionaire) and [introductory notes](lecture-01-introduction.pdf)
  
  
  
