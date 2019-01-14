@@ -12,7 +12,7 @@
 
  * [Syllabus and course description](syllabus/astr-302-w19-syllabus.pdf)
  * [Lectures](lectures/README.md)
- * [Homeworks](homeworks/)
+ * [Homeworks](homework/)
 
 ## Class Description and Objectives
 
