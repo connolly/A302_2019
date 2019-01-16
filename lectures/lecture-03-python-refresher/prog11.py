@@ -14,7 +14,8 @@ def to_floats(lst):
 def prod(lst):
     """ Computes and returns the product of a list """
     res = 1.
-    for x in lst: res *= x
+    for x in lst:
+        res *= x
     return res
 
 #### The main program begins here

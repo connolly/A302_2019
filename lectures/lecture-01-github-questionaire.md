@@ -14,7 +14,11 @@ Lectures 1 & 2
 1. Watch the introduction to git, and Github https://www.youtube.com/watch?v=2g9lsbJBPEs
   - If you don't have one, create a username on Github
  - Email me your Github username and I will add you to the team
+ 
 2. Based on the instructions in the video fork the class repository from https://github.com/connolly/A302_2019
+ - Clone the class repository to your desktop or directory
+
+3. Based on the instructions in the video fork the class repository from https://github.com/connolly/A302_2019_Homework
  - Clone the class repository to your desktop or directory
  - Create a new folder in the directory “Students” and assign it your name
  - Create a test file within the directory called “github_test_yourname”
