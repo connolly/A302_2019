@@ -6,6 +6,6 @@
 ## Lectures/notebooks 
 
  *  Lectures 1 and 2: [Introduction to the class and github](lecture-01-github-questionaire) and [introductory notes](lecture-01-introduction.pdf)
-  *  Lectures 2 and 3: [Python refresher 1](lecture-02-python-refresher) and [Python refresher 1](lecture-02-python-refresher)
+  *  Lectures 2 and 3: [Python refresher 1](lecture-02-python-refresher) and [Python refresher 2](lecture-03-python-refresher)
  
  
